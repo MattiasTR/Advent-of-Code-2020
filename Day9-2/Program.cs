@@ -11,11 +11,12 @@ namespace Day9_2
             var input = File.ReadLines("input.txt").Select(s => Convert.ToInt64(s));
 
             var preamble = input.Take(25).ToArray();
-            //var rest = input.TakeLast(input.Count() - 25);
+
+            Int64 xmasNumber = 0;
 
             for (int currentNumber = preamble.Count(); currentNumber < input.Count(); currentNumber++)
             {
-                Int64 xmasNumber = input.ElementAt(currentNumber);
+                xmasNumber = input.ElementAt(currentNumber);
 
                 var numberFound = false;
 
@@ -42,6 +43,24 @@ namespace Day9_2
 
                 preamble.TakeLast(preamble.Count() - 1).ToArray().CopyTo(preamble, 0);
                 preamble[preamble.Count() - 1] = xmasNumber;
+            }
+
+            bool foundSum = false;
+            for(int startPos = 0; startPos < input.Count() - 1; startPos++)
+            {
+                for(int length = input.Count() - 1; length >= 2; length--)
+                {
+                    var range = input.Skip(startPos).Take(length);
+                    if(range.Sum() == xmasNumber)
+                    {
+                        Console.WriteLine("Found contiguous numbers that sum to " + xmasNumber.ToString() + ". Lowest number is " + range.Min() + " and highest is " + range.Max() + ". Their sum is " + (range.Min() + range.Max()) + ".");
+                        foundSum = true;
+                        break;
+                    }
+                }
+
+                if (foundSum)
+                    break;
             }
         }
     }
